@@ -18,7 +18,7 @@ sudo apt-get install qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools 
 4.In the Console window enter getaccountaddress mn1 and copy the result. This is your MASTERNODE DEPOSIT ADDRESS, where you will deposit the coins to create a masternode. Pay exactly 100k DMB to this address. No more, no less.
 (Wait for the 1st confirmation of the transaction)
 5.In the Console Debug window enter "masternode genkey" and copy the result. This is your MASTERNODE PRIVKEY.
-6.Edit config file Digitalmoneybits.conf which is located in hidden folder ~/.Digitalmoneybits.  Then paste in the following:
+6.Edit config file Digitalmoneybits.conf which is located in hidden folder ~/.dmb.  Then paste in the following:
 
 masternode=1
 masternodeprivkey= (MASTERNODE PRIVKEY)
