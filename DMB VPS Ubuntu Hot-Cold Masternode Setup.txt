@@ -76,7 +76,7 @@ click ok,
 
 Close the wallet by going to File -> Exit.
 
-It should have created a file in your %appdata%/Digitalmoneybits folder called masternode.conf
+It should have created a file in your %appdata%/dmb folder called masternode.conf
 
 (Optional) You can open it to check or type "masternode list-conf" in wallet console
 
@@ -176,7 +176,7 @@ Step 5: Now you can Start your VPS masternode:
 
 (It should say   - It is recommended you use the following random password:   etc...
 
-And exit normally, it wants you to set a user and password in the file ~/.Digitalmoneybits/Digitalmoneybits.conf
+And exit normally, it wants you to set a user and password in the file ~/.dmb/Digitalmoneybits.conf
 You can use the password it suggests, or use another one you choose.
 
 
@@ -184,7 +184,7 @@ Step 6: Editing Digitalmoneybits.conf to set user and password (Note edit with n
 
 apt-get install nano git -y
 
-nano ~/.Digitalmoneybits/Digitalmoneybits.conf
+nano ~/.dmb/Digitalmoneybits.conf
 
 ##navigate and edit the file to make it look like this:
 ##(Change username and password)
