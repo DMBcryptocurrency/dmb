@@ -66,7 +66,7 @@ public:
         nRPCPort = 35098;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 16);
 
-        const char* pszTimestamp = "DMB is in the game";
+        const char* pszTimestamp = "And we start all over again";
 
         std::vector<CTxIn> vin;
         vin.resize(1);
@@ -80,16 +80,15 @@ public:
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
         genesis.nTime    = 1523899453;
-        genesis.nBits    = 520159231;
-        genesis.nNonce   = 35117;
+        genesis.nBits    = 520339231;
+        genesis.nNonce   = 35317;
 	
-
 
         hashGenesisBlock = genesis.GetHash();
 
-assert(hashGenesisBlock == uint256("0xa7ad13a4c97ebc60c492e1ce9795ed9b096de8aa0bbeeedd210c0c2722cee042"));
+assert(hashGenesisBlock == uint256("0x3f4ce71618777f85a62fcba786e80273b1bc0224a851d59f3ff086200c61f145"));
 
-        assert(genesis.hashMerkleRoot == uint256("0xd01db291a450d1fd32203b992ed6bfce5e73a0aebffe0677facc4c2a8510dbf2"));
+        assert(genesis.hashMerkleRoot == uint256("0xef64b62464a3c7b63786119bccbb6a584e69107761049f160216c3b3e05a6c5c"));
 
 
         
@@ -149,10 +148,10 @@ public:
         strDataDir = "testnet";
 
         // Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nBits  = 520159231; 
-        genesis.nNonce = 35117;
+        genesis.nBits  = 520339231; 
+        genesis.nNonce = 35317;
 
-        assert(hashGenesisBlock == uint256("0xa7ad13a4c97ebc60c492e1ce9795ed9b096de8aa0bbeeedd210c0c2722cee042"));
+        assert(hashGenesisBlock == uint256("0x3f4ce71618777f85a62fcba786e80273b1bc0224a851d59f3ff086200c61f145"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
