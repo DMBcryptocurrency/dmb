@@ -1077,7 +1077,7 @@ boost::filesystem::path GetDefaultDataDir()
     // Unix: ~/.Digitalmoneybits
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Digitalmoneybits";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "dmb";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -1089,10 +1089,10 @@ boost::filesystem::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     fs::create_directory(pathRet);
-    return pathRet / "Digitalmoneybits";
+    return pathRet / "dmb";
 #else
     // Unix
-    return pathRet / ".Digitalmoneybits";
+    return pathRet / ".dmb";
 #endif
 #endif
 }
