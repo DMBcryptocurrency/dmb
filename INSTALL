@@ -1,0 +1,9 @@
+Building Digitalmoneybits
+
+See doc/readme-qt.rst for instructions on building Digitalmoneybits QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of Digitalmoneybits.
+
+See doc/build-*.txt for instructions on building Digitalmoneybitsd,
+the intended-for-services, no-graphical-interface, reference
+implementation of Digitalmoneybits.

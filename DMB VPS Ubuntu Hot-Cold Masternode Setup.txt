@@ -1,0 +1,250 @@
+	Local Windows Hot wallet - VPS Ubuntu 14.04 and 16.04 Cold wallet setup
+-------------------------------------------------------------------------------------------
+
+We will be setting up two masternode wallets:
+
+1- One wallet is installed remotely on the VPS, it will not have funds in it, so it considered cold.
+2- One wallet is installed locally on your Windows system, it will have the funds in it, so it is considered hot. This acts as a proof that you own the funds, and as a remote control.
+
+After the install, you can shut down your local wallet anytime, and the remote wallet will continue working 24/7, and it will be sending your rewards to your local wallet.
+
+For this to work, you will need to rent a VPS, like at arubacloud.com, interserver.net, scaleway.com, vultur.com
+
+-----------------------
+The Local wallet Setup:
+-----------------------
+
+First download Windows wallet.
+
+Let the wallet sync. If it does not sync you can close and try again.
+
+Open yourself a new notepad textfile to paste all your informations for future use.
+
+What you are searching for is these informations:
+
+Masternode deposit address:
+Masternode private key:
+Remote IP address and port:
+Valid 100k DMB Transaction Hash:
+Valid 100k DMB Transaction Index:
+
+To find those infos, 
+Go to Help -> Debug Window and select Console tab
+
+In the Console window bottom field, type getaccountaddress mn1 and copy the result to your notepad.
+This is your MASTERNODE DEPOSIT ADDRESS, where you will deposit the coins to create a masternode. Pay exactly 100k DMB to this address. No more, no less.
+You need 15 confirmations on your valid tx to start your masternode.
+
+In the Console Debug window enter “masternode genkey” and copy the result to your notepad.
+This is your MASTERNODE PRIVKEY. 
+
+Now we need to find the Valid transaction proof:  
+(You need to have already made your exact 100k DMB transaction, and have the wallet unlocked, fully sync, and minimum 15 confirmations of 100k DMB transaction).
+
+Go to the help, debug window, console.
+
+Type masternode outputs
+
+You will get only empty {} if your transaction did not work properly.
+If you have a valid transaction you will get something like this:
+
+{
+    "9876235987jkghfkjashogfre987634259876342oiuyfihg98762135" : "0"
+}
+
+This is your "VALID TRANSACTION HASH" followed by your "TRANSACTION INDEX"
+
+Copy-paste the long string in your notepad (without all the extra caracters {  : ")    that is your Tx Hash.
+Then copy-paste to your notepad the alone number (0 or 1), that is called the Index.
+
+
+We are now ready to create the masternode:
+
+Go to the local wallet, masternode tab, click create.
+
+Fill in the fields:
+
+Alias: 		(random name of your masternode)
+Address:	(IP:Port  example 23.34.32.220:35097)  IP is your remote VPS IP Address, Default Port for DMB is 35097 
+PrivKey:	Your masternode private key
+TxHash:		Your valid Transaction hash, (the long string clean without the extra stuff)
+Output Index:	Your valid transaction index (0 or 1)
+Reward Address: Leave blank
+Reward:		Leave blank
+
+click ok,
+
+Close the wallet by going to File -> Exit.
+
+It should have created a file in your %appdata%/Digitalmoneybits folder called masternode.conf
+
+(Optional) You can open it to check or type "masternode list-conf" in wallet console
+
+In there you should have just one long string with all your infos one after the others:
+
+	Alias Address:Port PrivKey TxHash Index 
+
+Now you know where to find it.
+
+Open the DMB Wallet again by running Digitalmoneybits-qt.exe.
+
+The Local side is done, now we need to setup the VPS:
+
+
+------------------------------------------------
+Setting up the remote DMB Wallet On VPS 
+------------------------------------------------
+
+We will be copy-pasting commands one by one in the VPS console:
+
+(in Ubuntu console you paste using right click-enter. Ctrl-C and Ctrl-V doesn't work. Selection automatically copies to clipboard also).
+
+
+Starting and Updating Ubuntu:
+
+(Copy paste these commands as root):
+
+apt-get update
+
+apt-get upgrade -y
+
+
+If you want more security you can create a new user (optional but recommended):
+
+adduser newUsername
+usermod -aG sudo newUsername
+
+(Return to your ssh client and log in again with this new user).
+
+
+Step 2: Making swapfile:
+
+sudo dd if=/dev/zero of=/var/swap.img bs=1024k count=1000
+sudo mkswap /var/swap.img
+sudo swapon /var/swap.img
+
+
+To make the swap file persist after rebooted:
+
+sudo chmod 0600 /var/swap.img
+sudo chown root:root /var/swap.img
+sudo nano /etc/fstab
+
+Append the following line to the end of the file:
+
+/var/swap.img none swap sw 0 0
+
+Save the file and exit
+
+Step 3 : You need to install dependencies
+
+sudo apt-get -y update && sudo apt-get -y install build-essential libssl-dev libdb++-dev libboost-all-dev libcrypto++-dev libqrencode-dev libminiupnpc-dev libgmp-dev libgmp3-dev autoconf autogen automake libtool
+
+sudo apt-get install git
+
+git clone https://github.com/DMBcryptocurrency/dmb
+
+Step 4: Compiling the wallet
+
+cd ~/dmb/src
+
+make -f makefile.unix
+
+(this step takes a while, make sure it does not give you an error message at the end)
+
+
+* -Optional-
+*
+* Once completed, to see if the wallet is ready you can type:
+
+* ls
+
+* If you have the file called Digitalmoneybitsd in the list, that is your VPS wallet.
+
+* If you want to see the different functions of your wallet you can type:
+
+* ./Digitalmoneybitsd help 
+
+* -This was optional, only to help in case of problems or if you are curious-
+
+
+
+Step 5: Now you can Start your VPS masternode:
+
+
+./Digitalmoneybitsd
+
+(It should say   - It is recommended you use the following random password:   etc...
+
+And exit normally, it wants you to set a user and password in the file ~/.Digitalmoneybits/Digitalmoneybits.conf
+You can use the password it suggests, or use another one you choose.
+
+
+Step 6: Editing Digitalmoneybits.conf to set user and password (Note edit with nano or vi)
+
+apt-get install nano git -y
+
+nano ~/.Digitalmoneybits/Digitalmoneybits.conf
+
+##navigate and edit the file to make it look like this:
+##(Change username and password)
+
+rpcuser= (yourrandomuser)
+rpcpassword= (yourrandompassword)
+rpcallowip=127.0.0.1
+rpcport=35098
+listen=1
+server=1
+daemon=1
+port=35097
+logintimestamps=1
+maxconnections=256
+masternode=1
+masternodeprivkey= (from local wallet)
+
+##(Save And Exit)
+
+
+Let's Start the server again:
+
+cd ~/dmb/src
+
+./Digitalmoneybitsd
+
+You should see server starting, and let it sync for a while.
+To check the status of your masternode, press enter (or ctrl+c) to get command line active if it's not and type:
+
+./Digitalmoneybitsd getinfo 
+
+./Digitalmoneybitsd masternode status
+
+
+Once the blocks number is the same that you can see in the help-debug window-information of your synced local wallet, or on the block explorer, it means your vps wallet is synced.
+
+Restart your local wallet,  go to Masternodes -> My Masternodes. Press Update.
+
+If you did the procedure to setup your local wallet, you should see your masternode so you can press Start all and then Update again.
+
+You should see "Masternode is Running."
+
+You don't need to keep you local open now. 
+
+Your VPS "masternode status" command should show when it works fine.
+    "status" : 9,
+    "pubKeyMasternode" : "yourpubkey",
+    "notCapableReason" : "Successfully started masternode."
+
+
+DO NOT hit "Start" or "Start all" everytime when you open your local wallet to check of working masternode. Press "Update", wait (even 30mins) for list of all masternodes to refresh and then press "Update" again.
+
+
+If you get: 
+    "status" : 2,
+    "pubKeyMasternode" : "yourpubkey",
+    "notCapableReason" : "Could not find suitable coins! Start masternode in local wallet, in Masternode tab."
+
+Check masternode 100k DMB transaction if it has minimum 15 confirmations. 
+or
+Restart your local wallet , go to Masternodes -> My Masternodes. Press Update. Select masternode from list and press Start. Press Update again.
+
+
